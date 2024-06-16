@@ -1,2 +1,1 @@
-# roged-base
-AceBased database with socket
+# rogedbot-utils
