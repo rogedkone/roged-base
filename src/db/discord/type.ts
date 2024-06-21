@@ -1,4 +1,5 @@
 export type TActivity = {
+  id: string | null;
   name: string;
   desc: string;
   state: string;
@@ -10,11 +11,11 @@ export type TStatus = 'online' | 'dnd' | 'idle' | 'invisible' | 'offline';
 export type TMember = {
   id: string;
   username: string;
-  nickname: string | null;
+  nickname: string;
   hide_nick: boolean;
   custom_name?: string;
   status: TStatus
-  last_seen?: number | null;
+  last_seen?: number;
   devices: {
     desktop?: TStatus,
     mobile?: TStatus,

@@ -1,8 +1,7 @@
-import { Server } from 'socket.io';
+import io from './client';
+import { auth } from './middleware';
 
-const server = require('http').createServer();
-
-const io = new Server(server);
+io.use(auth);
 
 io.on('connection', (client) => {
   console.log(`SOCKET:STATUS: Client ${client.id} connected`);

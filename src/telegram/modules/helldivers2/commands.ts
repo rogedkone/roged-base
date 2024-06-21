@@ -1,0 +1,53 @@
+/* eslint-disable no-mixed-operators */
+import bot from 'telegram/bot';
+import { pushToDelete } from 'telegram/utils';
+import ApiHellDivers2 from './api';
+import { getMajorPlanetsId } from './utils';
+import major_order from './messages/major_order';
+import inactive_planets_status from './messages/inactive_planets_status';
+import active_planets_status from './messages/active_planets_status';
+
+bot.command('helldivers', async (ctx) => {
+  ctx.deleteMessage();
+  const hellDivers2Client = new ApiHellDivers2();
+  const orders = await hellDivers2Client.major_orders;
+  const reply = [];
+
+  if (orders.length === 0) {
+    const message = await ctx.api.sendMessage(ctx.chat?.id ?? -1, 'Главных приказов не обнаружено', {
+      message_thread_id: ctx.update.message?.message_thread_id,
+
+    }).catch((err) => err);
+    pushToDelete(message);
+    return false;
+  }
+
+  const majorIds = getMajorPlanetsId(orders[0]);
+  const orderType = orders[0].setting.tasks[0].type;
+  const activePlanets = await hellDivers2Client.active_planets;
+  const activePlanetsIds = activePlanets.map(({ planetIndex }) => planetIndex);
+  const planetStatuses = await hellDivers2Client.planets_status;
+  const planetsInfo = await hellDivers2Client.planets;
+
+  if (orderType === 3) {
+    const majorOrder = orders[0];
+    reply.push(`Прогресс приказа: <b>${Math.floor((majorOrder.progress[0] / majorOrder.setting.tasks[0].values[2]) * 100)}%</b>`);
+    reply.push(`Осталось убить: <b>${(new Intl.NumberFormat('ru-RU', { }).format(majorOrder.setting.tasks[0].values[2] - majorOrder.progress[0]))}</b>`);
+  } else {
+    reply.push(major_order(orders[0]));
+    reply.push('');
+    reply.push(active_planets_status(activePlanets
+      .filter(({ planetIndex }) => majorIds.includes(planetIndex))));
+    reply.push(inactive_planets_status(planetStatuses
+      .filter(({ index }) => majorIds.includes(index) && !activePlanetsIds
+        .includes(index)), planetsInfo));
+  }
+
+  reply.push(`До завершения приказа: <b>${Math.floor(orders[0].expiresIn / 86400)}д ${Math.floor(orders[0].expiresIn / 3600 % 24)}ч ${Math.floor(orders[0].expiresIn / 3600 / 24 % 60)}м</b>`);
+  reply.join('\n');
+
+  const message = await ctx.api.sendMessage(ctx.chat.id ?? -1, reply.join('\n'), { parse_mode: 'HTML', message_thread_id: ctx.update.message?.message_thread_id }).catch((err) => err);
+  pushToDelete(message);
+
+  return true;
+});
