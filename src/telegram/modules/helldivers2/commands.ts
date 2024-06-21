@@ -1,18 +1,20 @@
 /* eslint-disable no-mixed-operators */
-import bot from 'telegram/bot';
+import { MyContext } from 'telegram/bot';
 import { pushToDelete } from 'telegram/utils';
-import ApiHellDivers2 from './api';
+import { Composer } from 'grammy';
 import { getMajorPlanetsId } from './utils';
+import ApiHellDivers2 from './api';
 import major_order from './messages/major_order';
-import inactive_planets_status from './messages/inactive_planets_status';
 import active_planets_status from './messages/active_planets_status';
+import inactive_planets_status from './messages/inactive_planets_status';
 
-bot.command('helldivers', async (ctx) => {
+const helldivers = new Composer<MyContext>();
+helldivers.command('helldivers', async (ctx) => {
   ctx.deleteMessage();
   const hellDivers2Client = new ApiHellDivers2();
   const orders = await hellDivers2Client.major_orders;
   const reply = [];
-
+ 
   if (orders.length === 0) {
     const message = await ctx.api.sendMessage(ctx.chat?.id ?? -1, 'Главных приказов не обнаружено', {
       message_thread_id: ctx.update.message?.message_thread_id,
@@ -37,7 +39,7 @@ bot.command('helldivers', async (ctx) => {
     reply.push(major_order(orders[0]));
     reply.push('');
     reply.push(active_planets_status(activePlanets
-      .filter(({ planetIndex }) => majorIds.includes(planetIndex))));
+      .filter(({ planetIndex }) => majorIds.includes(planetIndex)))); 
     reply.push(inactive_planets_status(planetStatuses
       .filter(({ index }) => majorIds.includes(index) && !activePlanetsIds
         .includes(index)), planetsInfo));
@@ -51,3 +53,5 @@ bot.command('helldivers', async (ctx) => {
 
   return true;
 });
+
+export default helldivers;

@@ -1,29 +1,37 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import Base from '@db/base';
-import { TStatus } from '../type';
+import { TMessageIdential } from '../type';
 
 const refPath = 'telegram/status';
 
-const status = async () => {
-  const snapshot = await Base.ref<TStatus>(refPath).get();
+const getText = async () => {
+  const snapshot = await Base.ref<string>(`${refPath}/text`).get();
   if (snapshot.exists() && snapshot.val()) return snapshot.val();
   return null;
 };
 
-const createStatus = async (payload: TStatus) => {
-  await Base.ref(refPath).set(payload);
+const getMessage = async () => {
+  const snapshot = await Base.ref<TMessageIdential>(`${refPath}/message`).get();
+  if (snapshot.exists() && snapshot.val()) return snapshot.val();
+  return null;
 };
 
-const updateStatus = async (payload: (Partial<TStatus>)) => {
-  await Base.ref<TStatus>(refPath).transaction((snapshot) => {
-    if (snapshot.exists() && snapshot.val()) return { ...snapshot.val(), ...payload };
+const updateMessage = async (payload: TMessageIdential) => {
+  await Base.ref<TMessageIdential>(`${refPath}/message`).update(payload);
+};
+
+const updateStatus = async (payload: string) => {
+  await Base.ref<string>(`${refPath}/text`).transaction((snapshot) => {
+    if (snapshot.val() === payload) return snapshot.val();
+    if (snapshot.val()) return payload;
 
     return payload;
   });
 };
 
 export default {
-  status,
-  createStatus,
+  getText,
+  updateMessage,
+  getMessage,
   updateStatus,
 };

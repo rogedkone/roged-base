@@ -1,7 +1,7 @@
 import subscribers from './subscribers';
 
-const moduleDiscord = {
+const modulePinger = {
   subscribers,
 };
 
-export default moduleDiscord;
+export default modulePinger;

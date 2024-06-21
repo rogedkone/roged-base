@@ -13,11 +13,6 @@ export type TMessage = {
 
 export type TMessageIdential = Pick<TMessage, 'message_id'> & { chat: { id: number } };
 
-export type TStatus = {
-  message: TMessageIdential,
-  text: string
-};
-
 export type TPinger = {
   message_id: number,
   text: string,

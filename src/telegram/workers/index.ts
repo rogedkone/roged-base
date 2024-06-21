@@ -1,19 +1,13 @@
+import moduleDiscord from 'telegram/modules/discord';
 import clearMessages from './clearMessages';
-import pinger from './pinger';
 
 (async () => {
   const doWork = async () => {
     clearMessages();
+    moduleDiscord.subscribers.updateStatusMessage();
 
     setTimeout(() => doWork(), 5000);
   };
 
-  const doWork2 = async () => {
-    pinger();
-
-    setTimeout(() => doWork2(), 60000);
-  };
-
   doWork();
-  doWork2();
 })();

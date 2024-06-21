@@ -4,8 +4,8 @@ import bot from '../bot';
 import { removeFromDelete } from '../utils';
 
 export default async () => {
-  const messages = await DB.telegram.messages.toDelete.get();
-  if (messages.length === 0) return;
+  const messages = await DB.telegram.deleting.messages();
+  if (!messages || (messages && messages.length === 0)) return;
 
   for (const msg of messages) {
     bot.api.deleteMessage(msg.chat.id, msg.message_id)

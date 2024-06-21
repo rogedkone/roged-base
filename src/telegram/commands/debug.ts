@@ -1,11 +1,12 @@
 import DB from '@db/index';
 import config from '@utils/config';
-import bot from 'telegram/bot';
-import { InlineKeyboard } from 'grammy';
+import { MyContext } from 'telegram/bot';
+import { Composer, InlineKeyboard } from 'grammy';
 
-bot.command('debug', async (ctx) => {
+const debug = new Composer<MyContext>();
+debug.command('debug', async (ctx) => {
   ctx.deleteMessage();
-  const isDebug = await DB.self.debug.get();
+  const isDebug = await DB.self.debug.isDebug();
 
   const inlineKeyboard = new InlineKeyboard().text(isDebug ? 'Выключить' : 'Включить', `debug:${isDebug ? 'off' : 'on'}`);
 
@@ -14,3 +15,5 @@ bot.command('debug', async (ctx) => {
     reply_markup: inlineKeyboard,
   });
 });
+
+export default debug;

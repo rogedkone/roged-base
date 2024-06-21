@@ -7,7 +7,7 @@ const members = new Router({
 });
 
 members.get('/', async (ctx) => {
-  ctx.body = await DB.discord.members.get();
+  ctx.body = await DB.discord.members.getAll();
 });
 
 export default members.use(member.routes());

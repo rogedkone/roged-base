@@ -1,10 +1,12 @@
-import bot from 'telegram/bot';
+import { MyContext } from 'telegram/bot';
 import { pushToDelete } from 'telegram/utils';
+import { Composer } from 'grammy';
 import cities from './utils/cities';
 import ApiOpenWeather from './api';
 import messages from './messages';
 
-bot.callbackQuery(Object.keys(cities).map((city) => `openweather:${city}`), async (ctx) => {
+const queries = new Composer<MyContext>();
+queries.callbackQuery(Object.keys(cities).map((city) => `openweather:${city}`), async (ctx) => {
   const { data } = ctx.update.callback_query;
 
   const city = cities[data.split(':')[1]];
@@ -24,3 +26,5 @@ bot.callbackQuery(Object.keys(cities).map((city) => `openweather:${city}`), asyn
     pushToDelete(message);
   }
 });
+
+export default queries;

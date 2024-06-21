@@ -6,7 +6,7 @@ bot.callbackQuery(['debug:on', 'debug:off'], async (ctx) => {
   const { data } = ctx.update.callback_query;
   const isDebug = data === 'debug:on';
 
-  DB.self.debug.put(isDebug).then(() => {
+  DB.self.debug.setDebug(isDebug).then(() => {
     ctx.answerCallbackQuery();
   });
 });

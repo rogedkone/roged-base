@@ -48,7 +48,7 @@ export const addNewActivity = async (conversation: MyConversation, ctx: MyContex
   ctx.deleteMessages([message.message_id, statusIcon.message?.message_id ?? -1]);
 
   if (activityId && nameIcon && descIcon && statusIcon) {
-    await DB.discord.activities.activity.post({
+    await DB.discord.activities.updateActivity(activityId.message?.text ?? '', {
       id: activityId.message?.text ?? '',
       name: nameIcon.message?.text ?? '',
       desc: descIcon.message?.text ?? '',

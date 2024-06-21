@@ -1,11 +1,13 @@
 /* eslint-disable no-restricted-syntax */
-import bot from 'telegram/bot';
+import { MyContext } from 'telegram/bot';
 import { pushToDelete } from 'telegram/utils';
 import config from '@utils/config';
+import { Composer } from 'grammy';
 import ApiOpenWeather from './api';
 import messages from './messages';
 
-bot.on(':location').filter((ctx) => {
+const events = new Composer<MyContext>();
+events.on(':location').filter((ctx) => {
   if (ctx.update.message?.is_topic_message) return (ctx.update.message?.message_thread_id ?? '') === Number(config.TG_BOT_TOPIC_ID);
   return false;
 }, async (ctx) => {
@@ -24,3 +26,5 @@ bot.on(':location').filter((ctx) => {
     pushToDelete(message);
   }
 });
+
+export default events;

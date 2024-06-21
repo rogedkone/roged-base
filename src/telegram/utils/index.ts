@@ -1,19 +1,14 @@
 /* eslint-disable no-restricted-syntax */
-import { TMessage } from '@db/telegram/type';
+import { TMessageIdential } from '@db/telegram/type';
 import DB from '@db/index';
-import config from '@utils/config';
-import dayjs from 'dayjs';
-import { InlineKeyboard } from 'grammy';
-import bot from '../bot';
 
-export const pushToDelete = (message: Pick<TMessage, 'message_id'> & { chat: { id: number } }, ms: number = 1000 * 60 * 1) => setTimeout(async () => DB.telegram.messages.toDelete.put(message), ms);
+export const pushToDelete = (message: TMessageIdential, ms: number = 1000 * 60 * 1) => setTimeout(async () => DB.telegram.deleting.addMessage(message), ms);
 
-export const removeFromDelete = async (message: Pick<TMessage, 'message_id'> & { chat: { id: number } }) => {
-  await DB.telegram.messages.toDelete.del({ message_id: message.message_id, chat: { id: message.chat.id } });
+export const removeFromDelete = async (message: TMessageIdential) => {
+  await DB.telegram.deleting.removeMessage(message);
 };
 
 export default {
-  // editSectionText,
   pushToDelete,
   removeFromDelete,
 };

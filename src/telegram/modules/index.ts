@@ -1,3 +1,2 @@
-import './discord';
-import './helldivers2';
-import './openweather';
+export { default as moduleOpenWeather } from './openweather';
+export { default as moduleHelldivers } from './helldivers2';

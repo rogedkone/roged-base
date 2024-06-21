@@ -15,14 +15,14 @@ const chooseIcon = ({
     online: '🟢',
     dnd: '🔴',
     idle: '😴',
-    offline: '⚫',
+    offline: '❌',
   };
 
   if (in_voice) {
     return `${devices.mobile !== 'offline' && !devices.desktop && !devices.web ? '🗿' : '🚗'}`;
   }
 
-  return status === 'offline' && id === DIMAS_ID ? '🐷' : statuses[status];
+  return status === 'offline' && id === DIMAS_ID ? '❌' : statuses[status];
 };
 
 const chooseName = (member: TMember): string => member.custom_name || member.nickname || member.username;
@@ -47,7 +47,7 @@ const chooseActivity = async ({ activities }: Pick<TMember, 'activities'>, isDeb
       desc: '',
       state: '',
     };
-    await DB.discord.activities.activity.get(activity.id ?? '').then((res) => {
+    await DB.discord.activities.getActivity(activity.id ?? '').then((res) => {
       icons = res ?? { name: '', desc: '', state: '' };
     });
     const times = parseDate(dayjs(activity.createAt * 1000));
@@ -65,7 +65,7 @@ const lastSeen = (member: TMember) => {
   if (!member.last_seen) return '';
   const times = parseDate(dayjs(member.last_seen * 1000));
 
-  return `\nПоследний раз свина видели:\n${times.days ? `${times.days}д ` : ''}${times.hours ? `${times.hours}ч ` : ''}${times.minutes ? `${times.minutes}мин ` : ''}${times.seconds ? `${times.seconds}сек` : ''} назад`;
+  return `\n🐷 ${times.days ? `${times.days}д ` : ''}${times.hours ? `${times.hours}ч ` : ''}${times.minutes ? `${times.minutes}мин ` : ''}${times.seconds ? `${times.seconds}сек` : ''}`;
 };
 const parseMembers = async (member: TMember, isDebug: boolean = false) => {
   const memberString = [
@@ -79,7 +79,7 @@ const parseMembers = async (member: TMember, isDebug: boolean = false) => {
 };
 
 export const generateStatus = async (members: TMember[]):Promise<string> => {
-  const isDebug = await DB.self.debug.get();
+  const isDebug = await DB.self.debug.isDebug();
   const msg: string[] = [];
   const voice = members.filter(({ in_voice }) => in_voice);
   const online = members.filter((member) => !voice.includes(member) && member.status === 'online');

@@ -1,9 +1,10 @@
 /* eslint-disable no-restricted-syntax */
-import bot from 'telegram/bot';
-import { InlineKeyboard } from 'grammy';
+import { MyContext } from 'telegram/bot';
+import { Composer, InlineKeyboard } from 'grammy';
 import cities from './utils/cities';
 
-bot.command('weather', (ctx) => {
+const commands = new Composer<MyContext>();
+commands.command('weather', (ctx) => {
   ctx.deleteMessage();
   const inlineKeyboard = new InlineKeyboard();
   for (const city of Object.keys(cities)) {
@@ -16,3 +17,5 @@ bot.command('weather', (ctx) => {
     reply_markup: inlineKeyboard,
   }).catch((err) => err);
 });
+
+export default commands;

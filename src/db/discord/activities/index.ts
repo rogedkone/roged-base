@@ -7,7 +7,7 @@ const getAll = async () => {
   return null;
 };
 
-const activity = async (id: string) => {
+const getActivity = async (id: string) => {
   const snapshot = await Base.ref<Omit<TActivity, 'createAt'>>(`discord/activities/${id}`).get();
   if (snapshot.exists() && snapshot.val()) return snapshot.val();
   return null;
@@ -32,7 +32,7 @@ const removeActivity = async (id: string) => {
 
 export default {
   getAll,
-  activity,
+  getActivity,
   createActivity,
   updateActivity,
   removeActivity,
