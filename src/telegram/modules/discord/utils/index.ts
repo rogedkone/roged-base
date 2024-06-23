@@ -72,7 +72,7 @@ const parseMembers = async (member: TMember, isDebug: boolean = false) => {
     chooseIcon(member),
     chooseName(member),
     (member.activities ?? []).length === 0 ? undefined : `\n${await chooseActivity(member, isDebug)}`,
-    (member.id === DIMAS_ID ? lastSeen(member) : undefined),
+    (member.id === DIMAS_ID && member.last_seen !== -1 ? lastSeen(member) : undefined),
   ].join(' ');
 
   return memberString;

@@ -23,4 +23,5 @@ export type TMember = {
   },
   in_voice: boolean;
   activities: TActivity[] | null;
+  telegram: string | null;
 };

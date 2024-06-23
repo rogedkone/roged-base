@@ -14,8 +14,8 @@ export type TMessage = {
 export type TMessageIdential = Pick<TMessage, 'message_id'> & { chat: { id: number } };
 
 export type TPinger = {
-  message_id: number,
   text: string,
   users: string[],
-  expire: number
+  start: number,
+  expire: number,
 };

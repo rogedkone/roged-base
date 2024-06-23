@@ -1,7 +1,7 @@
-import sendStatusMessage from './sendPingerMessage';
-import updateStatusMessage from './updatePingerMessage';
+import sendPingerMessage from './sendPingerMessage';
+import sendEndPingerMessage from './sendEndPingerMessage';
 
 export default {
-  updateStatusMessage,
-  sendStatusMessage,
+  sendEndPingerMessage,
+  sendPingerMessage,
 };

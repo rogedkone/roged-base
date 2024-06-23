@@ -14,3 +14,15 @@ export const getLastActivity = async ({ id, presence }: { id: string, presence: 
 
   return dayjs().unix();
 };
+
+export const getTelegram = (id: string) => {
+  const logins: Record<string, string> = {
+    '859542715972321320': 'rogedkone',
+    '279708254420992011': 'Mr_Antiz',
+    '525391605062959114': 'PotatoDungeonMaster',
+    '487400812570607616': 'conceptira',
+    288258478110146560: 'RyuNoChi',
+  };
+
+  return logins[id] ?? 'none';
+};

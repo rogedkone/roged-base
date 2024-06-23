@@ -7,6 +7,7 @@ import './workers';
 import { addNewActivity } from './conversations';
 import { moduleHelldivers, moduleOpenWeather } from './modules';
 import commands from './commands';
+import modulePinger from './modules/pinger';
 
 bot.use(session({ initial: () => ({}) }));
 
@@ -15,6 +16,7 @@ bot.use(conversations());
 bot.use(createConversation(addNewActivity, 'discord-activity'));
 
 bot.use(commands.middleware());
+bot.use(modulePinger.queries.middleware());
 bot.use(moduleOpenWeather.middleware());
 bot.use(moduleHelldivers.middleware());
 

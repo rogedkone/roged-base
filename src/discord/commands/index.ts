@@ -4,12 +4,13 @@ import {
 import config from '@utils/config';
 import ping from './ping';
 import time from './time';
+import pingTg from './ping-tg';
 
 type Command = {
   data: SlashCommandBuilder;
   execute: (interaction: CommandInteraction) => Promise<void>; };
 
-const commands = [ping, time];
+const commands = [ping, time, pingTg];
 
 export const initCommands = async () => {
   const rest = new REST().setToken(config.DC_BOT_TOKEN);

@@ -5,7 +5,7 @@ import config from '@utils/config';
 import { TMember } from '@db/discord/type';
 import DB from '@db/index';
 import dayjs from 'dayjs';
-import { getLastActivity } from 'discord/utils';
+import { getLastActivity, getTelegram } from 'discord/utils';
 import client from '../bot';
 
 export default async () => {
@@ -43,6 +43,7 @@ export default async () => {
         createAt: dayjs(activity.timestamps?.start).unix(),
       })),
       last_seen: await getLastActivity({ id, presence }),
+      telegram: getTelegram(id),
     };
 
     DB.discord.members.updateMember(id, update);
