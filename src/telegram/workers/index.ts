@@ -43,6 +43,15 @@ import clearMessages from './clearMessages';
     setTimeout(() => doWork2(), 60000);
   };
 
+  const doWork3 = async () => {
+    const message = await DB.telegram.status.getMessage();
+    if (message) {
+      bot.api.deleteMessage(config.TG_BOT_CHAT_ID, message.message_id);
+    }
+    setTimeout(() => doWork3(), 1000 * 60 * 60);
+  };
+
   doWork();
   doWork2();
+  doWork3();
 })();
